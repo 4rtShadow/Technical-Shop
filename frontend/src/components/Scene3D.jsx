@@ -40,13 +40,15 @@ function FloatingCubes() {
 
 export default function Scene3D() {
   return (
-    <div className="w-full h-screen absolute top-0 left-0 z-0">
-      <Canvas camera={{ position: [0, 0, 10] }}>
+    // make scene less tall on small devices to avoid covering content and improve performance
+    <div className="w-full h-96 md:h-screen absolute top-0 left-0 z-0 pointer-events-none">
+      <Canvas camera={{ position: [0, 0, 10] }} style={{ touchAction: 'none' }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} intensity={1} />
           <pointLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
-          <Stars radius={100} depth={50} count={5000} factor={4} fade speed={1} />
+          {/* reduce stars count on small screens via CSS not trivial here; lower default to keep perf okay */}
+          <Stars radius={100} depth={50} count={1500} factor={4} fade speed={1} />
           <RotatingBox />
           <FloatingCubes />
           <OrbitControls

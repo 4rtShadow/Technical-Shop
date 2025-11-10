@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request, HTTPException, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
 from fastapi.openapi.utils import get_openapi
 from app.core.config import settings
@@ -133,28 +133,25 @@ async def redoc_html(request: Request):
 # OpenAPI schema доступен всем (для frontend интеграции)
 @app.get("/openapi.json", include_in_schema=False)
 async def get_openapi_schema():
-    """OpenAPI схема доступна всем"""
-    if app.openapi_schema:
-        return app.openapi_schema
-    
-    # Важно: get_openapi() уже содержит "openapi": "3.0.2"
-    openapi_schema = get_openapi(
-        title=app.title,
-        version=app.version,
-        description=app.description,
-        routes=app.routes,
-    )
+    """Корректно формируем и возвращаем OpenAPI схему"""
+    if not app.openapi_schema:
+        openapi_schema = get_openapi(
+            title=app.title,
+            version=app.version,
+            description=app.description,
+            routes=app.routes,
+        )
+        # Добавляем security схемы, если нужно
+        openapi_schema.setdefault("components", {})
+        openapi_schema["components"].setdefault("securitySchemes", {})
+        openapi_schema["components"]["securitySchemes"]["bearerAuth"] = {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
 
-    # Не добавляй openapi вручную! (он уже есть)
-    # Добавляем security схемы
-    openapi_schema.setdefault("components", {})
-    openapi_schema["components"].setdefault("securitySchemes", {})
-    openapi_schema["components"]["securitySchemes"]["bearerAuth"] = {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-    }
+        # Сохраняем результат
+        app.openapi_schema = openapi_schema
 
-    app.openapi_schema = openapi_schema
-    return app.openapi_schema
-
+    # Возвращаем JSON корректно
+    return JSONResponse(content=app.openapi_schema)

@@ -142,7 +142,11 @@ async def get_openapi_schema():
         description=app.description,
         routes=app.routes,
     )
+    # Добавляем версию OpenAPI
+    openapi_schema["openapi"] = "3.0.2"
     # Добавляем security схемы
+    if "components" not in openapi_schema:
+        openapi_schema["components"] = {}
     openapi_schema["components"]["securitySchemes"] = {
         "bearerAuth": {
             "type": "http",

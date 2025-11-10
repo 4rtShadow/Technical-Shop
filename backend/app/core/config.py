@@ -22,6 +22,14 @@ class Settings(BaseSettings):
     ADMIN_PASSWORD: str = "qwertyasdfghjkl1234567890"
     ADMIN_EMAIL: str = "admin@techstore.com"
     
+    # Email settings
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    EMAILS_FROM_EMAIL: str = "noreply@techstore.com"
+    EMAILS_FROM_NAME: str = "TechStore"
+    
     class Config:
         env_file = ".env"
         case_sensitive = True

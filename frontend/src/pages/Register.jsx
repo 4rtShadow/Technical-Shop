@@ -24,8 +24,8 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await api.post('/users/', formData)
-      toast.success('Регистрация успешна! Войдите в систему.')
+      const response = await api.post('/users/', formData)
+      toast.success(response.data.message || 'Регистрация успешна! Проверьте email для подтверждения.')
       navigate('/login')
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Ошибка регистрации')
@@ -44,7 +44,7 @@ export default function Register() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">Имя пользователя</label>
+            <label className="block text-sm font-medium mb-2">Логин</label>
             <input
               type="text"
               value={formData.username}

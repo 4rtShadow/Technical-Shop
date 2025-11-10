@@ -39,7 +39,7 @@ export default function Login() {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">Имя пользователя</label>
+            <label className="block text-sm font-medium mb-2">Логин</label>
             <input
               type="text"
               value={username}
@@ -65,12 +65,20 @@ export default function Login() {
             Войти
           </button>
         </form>
-        <p className="mt-4 text-center text-gray-400">
-          Нет аккаунта?{' '}
-          <Link to="/register" className="text-blue-400 hover:text-blue-300">
-            Зарегистрироваться
-          </Link>
-        </p>
+        <div className="mt-4 text-center space-y-2">
+          <p className="text-gray-400">
+            Нет аккаунта?{' '}
+            <Link to="/register" className="text-blue-400 hover:text-blue-300">
+              Зарегистрироваться
+            </Link>
+          </p>
+          <p className="text-sm text-gray-500">
+            Не можете войти?{' '}
+            <Link to="/verify-email" className="text-blue-400 hover:text-blue-300">
+              Подтвердить email
+            </Link>
+          </p>
+        </div>
       </motion.div>
     </div>
   )

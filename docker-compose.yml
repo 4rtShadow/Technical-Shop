@@ -32,6 +32,13 @@ services:
       DATABASE_URL: postgresql://techstore:techstore123@postgres:5432/techstore
       SECRET_KEY: 09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
       CORS_ORIGINS: '["http://localhost:3000", "http://localhost", "http://frontend"]'
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USERNAME: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME}
+      SMTP_USE_TLS: ${SMTP_USE_TLS}
     depends_on:
       postgres:
         condition: service_healthy

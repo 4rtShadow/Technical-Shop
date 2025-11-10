@@ -21,7 +21,8 @@ services:
   backend:
     build: ./backend
     container_name: techstore_backend
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    env_file:
+      - ./.env
     volumes:
       - ./backend:/app
     ports:
@@ -30,13 +31,13 @@ services:
       DATABASE_URL: postgresql://techstore:techstore123@postgres:5432/techstore
       SECRET_KEY: 09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7
       CORS_ORIGINS: '["http://localhost:3000", "http://localhost", "http://frontend"]'
-      SMTP_HOST: smtp.gmail.com
-      SMTP_PORT: 587
-      SMTP_USERNAME: artemtartygin@gmail.com
-      SMTP_PASSWORD: 99830056Abcd
-      SMTP_FROM_EMAIL: artemtartygin@gmail.com
-      SMTP_FROM_NAME: Artem Tartygin
-      SMTP_USE_TLS: true
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USERNAME}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      EMAILS_FROM_EMAIL: ${SMTP_FROM_EMAIL}
+      EMAILS_FROM_NAME: ${SMTP_FROM_NAME}
+      PYTHONPATH: /app
     depends_on:
       postgres:
         condition: service_healthy

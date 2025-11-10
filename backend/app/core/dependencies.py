@@ -34,6 +34,14 @@ async def get_current_active_user(
 ) -> User:
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
+    
+    # Админы не требуют email верификации
+    if current_user.role != UserRole.ADMIN and not current_user.is_email_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Email not verified"
+        )
+    
     return current_user
 
 async def get_current_admin_user(

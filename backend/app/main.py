@@ -136,24 +136,25 @@ async def get_openapi_schema():
     """OpenAPI схема доступна всем"""
     if app.openapi_schema:
         return app.openapi_schema
+    
+    # Важно: get_openapi() уже содержит "openapi": "3.0.2"
     openapi_schema = get_openapi(
         title=app.title,
         version=app.version,
         description=app.description,
         routes=app.routes,
     )
-    # Добавляем версию OpenAPI
-    openapi_schema["openapi"] = "3.0.2"
+
+    # Не добавляй openapi вручную! (он уже есть)
     # Добавляем security схемы
-    if "components" not in openapi_schema:
-        openapi_schema["components"] = {}
-    openapi_schema["components"]["securitySchemes"] = {
-        "bearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT",
-        }
+    openapi_schema.setdefault("components", {})
+    openapi_schema["components"].setdefault("securitySchemes", {})
+    openapi_schema["components"]["securitySchemes"]["bearerAuth"] = {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
     }
+
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 

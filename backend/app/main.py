@@ -14,6 +14,7 @@ app = FastAPI(
     title="TechStore API",
     description="REST API for Electronics Store",
     version="1.0.0",
+    openapi_version="3.1.0",
     docs_url=None,  # Отключаем стандартную документацию
     redoc_url=None  # Отключаем стандартную документацию
 )
